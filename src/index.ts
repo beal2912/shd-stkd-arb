@@ -131,13 +131,13 @@ require('dotenv').config();
         log.info("===".repeat(20))
         let stkdInfo = await getStkdInfo(secretjs, stkdscrt)
         
-        log.info("stck-scrt balance : "+stkdInfo.balance)
-        log.info("stck-scrt currently unbonding : "+stkdInfo.unbonding)
+        log.info("stkd-scrt balance : "+stkdInfo.balance)
+        log.info("stkd-scrt currently unbonding : "+stkdInfo.unbonding)
         
         
         // checking if stkd-scrt to claim
         log.info("===".repeat(20))
-        log.info("stck-scrt claimable : "+stkdInfo.claimable)
+        log.info("stkd-scrt claimable : "+stkdInfo.claimable)
         if(stkdInfo.claimable > 0.1){
 
             log.info("start of the claiming Tx")
