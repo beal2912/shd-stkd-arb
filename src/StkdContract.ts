@@ -46,7 +46,6 @@ export async function getStkdPrice(client: SecretNetworkClient):Promise<number>{
 
 
 
-
 export async function getStkdInfo(client: SecretNetworkClient):Promise<any>{
     try{
         let now = Math.floor(new Date().getTime() / 1000) 
@@ -79,6 +78,8 @@ export async function getStkdInfo(client: SecretNetworkClient):Promise<any>{
         return 0
     }
 }
+
+
 
 export async function claimStkdToken(client: SecretNetworkClient):Promise<TxResponse|undefined>{
     try{

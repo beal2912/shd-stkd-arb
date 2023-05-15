@@ -1,4 +1,4 @@
-import { MsgExecuteContract, SecretNetworkClient, TxResultCode } from "secretjs";
+import { SecretNetworkClient } from "secretjs";
 import { Wallet as SecretWallet } from 'secretjs';
 
 import { delay, round } from "./botlib/utils";
@@ -6,8 +6,7 @@ import { log } from "./botlib/Logger";
 
 import * as BIP39 from "bip39";
 
-import { Vault, liquidatePosition } from "./ShadeLiquidation";
-import { Token, getPublicBalance, getUpdatedSecretBalance } from "./SecretWallet";
+import { Token, getPublicBalance, getUpdatedSecretBalance, wrapScrt } from "./SecretWallet";
 import { executeTrade, getRouteList, simulateBestSwap } from "./SecretTrade";
 import { claimStkdToken, getStkdInfo, getStkdPrice, unbondStkdToken } from "./StkdContract";
 
@@ -32,6 +31,7 @@ require('dotenv').config();
     const txFee = Number(process.env.TX_FEE) ?? 0.2
     const minPercent = Number(process.env.TX_FEE) ?? 0.03
     const interval = Number(process.env.INTERVAL) ?? 60
+    const reservedFund = Number(process.env.RESERVED_FUND) ?? 2
 
     let stkdscrt: Token = tokenList.tokens.find( (w: Token) => w.contract === "secret1k6u0cy4feepm6pehnz804zmwakuwdapm69tuc4")
     let sscrt: Token = tokenList.tokens.find( (w: Token) => w.contract === "secret1k0jntykt7e4g3y88ltc60czgjuqdy4c9e8fzek")
@@ -46,31 +46,34 @@ require('dotenv').config();
     })
 
 
-
-
-    log.info("===".repeat(20))
-
-    let scrtBalance = await getPublicBalance(secretjs, 'uscrt')
-    log.info("Your address: "+signer.address)
-    log.info("scrt: "+scrtBalance)
-    if(scrtBalance < 0.5){
-        log.info("You need some secret token in your wallet for Gas Fee")
-        await delay(2000)
-        process.exit(0)
-    }
-
-
-    log.info("===".repeat(20))
-
     let routeList = getRouteList(sscrt, stkdscrt, 4)
     log.info("we find "+routeList.length+" route(s) to make the trade")
 
-    let stkdprice = await getStkdPrice(secretjs)
-
-    log.info("the price of stkd-scrt is :"+stkdprice)
-    
+   
     while(true){
 
+        log.info("===".repeat(20))
+
+        let scrtBalance = await getPublicBalance(secretjs, 'uscrt')
+        log.info("Your address: "+signer.address)
+        log.info("scrt: "+scrtBalance)
+        if(scrtBalance < 0.5){
+            log.info("You need some secret token in your wallet for Gas Fee")
+            await delay(2000)
+            process.exit(0)
+        }
+    
+        if(scrtBalance > reservedFund + 0.1){
+            await wrapScrt(secretjs, (scrtBalance - reservedFund))
+        }
+        log.info("===".repeat(20))
+
+        let stkdprice = await getStkdPrice(secretjs)
+    
+        log.info("the price of stkd-scrt is :"+stkdprice)
+
+
+        
 
         // checking sscrt balance
         let startAmount = await getUpdatedSecretBalance(secretjs, sscrt)
@@ -114,7 +117,6 @@ require('dotenv').config();
                             }
                         }
                     }
-
 
                 }
             }

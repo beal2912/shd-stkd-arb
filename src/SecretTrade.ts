@@ -11,7 +11,8 @@ import { delay } from "./botlib/utils";
 
 
 
-
+require('dotenv').config();
+const gasPrice = Number(process.env.GASPRICE) ?? 0.1;
 
 interface RouterList{
     [index: string]: Router
@@ -131,7 +132,7 @@ export async function executeTrade(client: SecretNetworkClient, route: Route, to
       
             let tx = await client.tx.broadcast(msgList, {
                 gasLimit: 910_000 * (msgList.length) +  650_000 * (route.marketPath.length),
-                gasPriceInFeeDenom: 0.0125,
+                gasPriceInFeeDenom: gasPrice,
                 feeDenom: "uscrt",
             })
 

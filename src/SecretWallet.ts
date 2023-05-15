@@ -1,7 +1,7 @@
-import { SecretNetworkClient } from "secretjs";
+import { MsgExecuteContract, SecretNetworkClient } from "secretjs";
 import { log } from "./botlib/Logger";
 import BigNumber from "bignumber.js";
-import { delay } from "./botlib/utils";
+import { delay, floor } from "./botlib/utils";
 import { Error } from "./botlib/Error";
 
 
@@ -13,6 +13,10 @@ export interface Token{
     key: string,
     min_amount?: number,
 }
+
+require('dotenv').config();
+const gasPrice = Number(process.env.GASPRICE) ?? 0.1;
+
 
 export async function getPublicBalance(client: SecretNetworkClient, denom: string): Promise<number>{
     try{
@@ -69,4 +73,33 @@ export async function getUpdatedSecretBalance(client: SecretNetworkClient, token
         }
     }      
     return 0
+}
+
+
+
+
+export async function wrapScrt(client: SecretNetworkClient, amount: number){
+
+    let quantity = new BigNumber(floor(amount,0.0001)).shiftedBy(6).toString()
+
+    let message = {deposit: {}}
+    let funds = [{
+        amount: quantity,
+        denom: "uscrt"
+    }]
+    let msg = new MsgExecuteContract({
+        sender: client.address,
+        contract_address: "secret1k0jntykt7e4g3y88ltc60czgjuqdy4c9e8fzek",
+        code_hash: "af74387e276be8874f07bec3a87023ee49b0e7ebe08178c49d0a49c3c98ed60e",
+        msg: message,
+        sent_funds: funds
+    })
+    let resp = await client.tx.broadcast([msg], {
+        gasLimit: 60_000,
+        gasPriceInFeeDenom: gasPrice,
+        feeDenom: "uscrt"
+    })
+
+
+
 }
