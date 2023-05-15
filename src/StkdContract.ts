@@ -3,19 +3,10 @@ import { Wallet as SecretWallet } from 'secretjs';
 import { log } from "./botlib/Logger"
 import { Error } from "./botlib/Error";
 import BigNumber from "bignumber.js";
+import { Token } from "./SecretWallet";
 require('dotenv').config();
 
-const gasprice = process.env.GASPRICE ?? "0.0125"
-
-
-export interface Vault{
-    id: string,
-    name: string,
-    registry: string, 
-    contract: string,
-    codehash: string,
-}
-
+const gasprice = process.env.GASPRICE ?? "0.1"
 
 
 
@@ -46,7 +37,7 @@ export async function getStkdPrice(client: SecretNetworkClient):Promise<number>{
 
 
 
-export async function getStkdInfo(client: SecretNetworkClient):Promise<any>{
+export async function getStkdInfo(client: SecretNetworkClient, token: Token):Promise<any>{
     try{
         let now = Math.floor(new Date().getTime() / 1000) 
         const info: any = await client.query.compute.queryContract({
@@ -55,7 +46,7 @@ export async function getStkdInfo(client: SecretNetworkClient):Promise<any>{
             query: { 
                 holdings: {
                   address: client.address,
-                  key: "f250f88ab68c2f5db3190139b65e3877087e1f3febec17456da4e7c0bf42a4e9",
+                  key: token.key,
                   time: now,
                 }
               }
@@ -70,7 +61,7 @@ export async function getStkdInfo(client: SecretNetworkClient):Promise<any>{
         let error = new Error(e)
         if(error.isKo() || error.isNotSure()){
             log.info("Rpc Error or timeout, let's retry the getStkdInfo")
-            return await getStkdInfo(client)
+            return await getStkdInfo(client, token)
         }
         else{
             log.info("Unknown error, perhaps functionnal")

@@ -102,7 +102,7 @@ require('dotenv').config();
                         
                         if(txTrade.code === 0){
                             log.info("Trade is Ok !!!, let's unbond the token")
-                            let stkdInfo = await getStkdInfo(secretjs)
+                            let stkdInfo = await getStkdInfo(secretjs, stkdscrt)
                             let amountToUnbond = 0
                             if(stkdInfo.balance >= bestTrade.result){
                                 amountToUnbond = bestTrade.result
@@ -129,7 +129,7 @@ require('dotenv').config();
 
         // checking stkd-scrt balance
         log.info("===".repeat(20))
-        let stkdInfo = await getStkdInfo(secretjs)
+        let stkdInfo = await getStkdInfo(secretjs, stkdscrt)
         
         log.info("stck-scrt balance : "+stkdInfo.balance)
         log.info("stck-scrt currently unbonding : "+stkdInfo.unbonding)
