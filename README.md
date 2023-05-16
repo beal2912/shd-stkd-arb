@@ -106,7 +106,7 @@ to stop the bot just use ctrl + c in linux or close the terminal
 # set up the bot as a service 
 this will allow you to run the bot 24/7
 
-create a new file service file /etc/systemd/system/ named shd-liquidation.service 
+create a new file service file /etc/systemd/system/ named shd-stkd-bot.service 
 you need to be root to edit the file
 ```
 [Unit]
