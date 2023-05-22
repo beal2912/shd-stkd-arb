@@ -18,7 +18,7 @@ export class Route{
     print(){
         let out: string ="";
         for(const market of this.marketPath){
-            out= out + market.name + ' > ' ;
+            out= out + market.exchange +"."+ market.name + ' > ' ;
         }
         return out;
     }

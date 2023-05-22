@@ -48,7 +48,9 @@ require('dotenv').config();
 
     let routeList = getRouteList(sscrt, stkdscrt, 4)
     log.info("we find "+routeList.length+" route(s) to make the trade")
-
+    for(let route of routeList){
+        log.info(route.print())
+    }
    
     while(true){
 
@@ -88,7 +90,7 @@ require('dotenv').config();
     
             if(bestTrade){
                 
-                log.info("the trade result would be : "+round(bestTrade.result, 0.0001)+" stkd-scrt")
+                log.info("the best trade result would be : "+round(bestTrade.result, 0.0001)+" stkd-scrt")
                 let ratio = (bestTrade.result / quantity) * stkdprice
                 let win =  stkdprice * bestTrade.result - startAmount - txFee
                 log.info("current ratio is : "+ratio+" and the win for "+startAmount+" initial sscrt would be : "+ round(win, 0.0001))
@@ -96,7 +98,7 @@ require('dotenv').config();
                 if(win / startAmount > minPercent ){
                     log.info("we can make an arb")
                     // trade
-                    let txTrade = await executeTrade(secretjs, bestTrade.route, sscrt, stkdscrt, startAmount, bestTrade.result * 0.999)
+                   /*  let txTrade = await executeTrade(secretjs, bestTrade.route, sscrt, stkdscrt, startAmount, bestTrade.result * 0.999)
                     if(txTrade){
                         log.info("Trade Tx result : "+txTrade.rawLog)
                         
@@ -116,7 +118,7 @@ require('dotenv').config();
                                 log.info("Unbonding Tx result : "+txUnbond.rawLog)
                             }
                         }
-                    }
+                    } */
 
                 }
             }

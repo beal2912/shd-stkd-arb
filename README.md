@@ -1,7 +1,11 @@
-# Shade Arbitrage scrt / stkd secret bot 
+# Secret Arbitrage sscrt / stkd-scrt bot 
 
-This typescript bot executes arbitrage between the sscrt / stkd-scrt market on Shade Swap and the price of unbonding in the stkd-scrt derivative contract.
+This typescript bot executes arbitrage between the sscrt / stkd-scrt market on Shade Swap or Blizzard finance and the price of unbonding in the stkd-scrt derivative contract.
 The bot need scrt funds to be able to perform arbitrages.  
+
+## Changelog 
+- 2023-05-21: adding support for blizzard finance pool sscrt / stkd-scrt (pool info, simulate/execute trade)
+- 2023-05-15: first public version (HackSecret submission)
 
 ## Strategy
 

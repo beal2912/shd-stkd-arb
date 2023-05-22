@@ -13,7 +13,7 @@ export const secretAllMarket: MarketData[] = [
 
     // Shade Swap
     { 
-        id: 1,
+        id: 200,
         name: "s-silk-shade",
         exchange: "shade",
         base: "secret1fl449muk5yq8dlad7a22nje4p5d2pnsgymhjfd",
@@ -31,7 +31,7 @@ export const secretAllMarket: MarketData[] = [
 
     },
     { 
-        id: 2,
+        id: 201,
         name: "s-shd-sbld",
         exchange: "shade",
         base: "secret153wu605vvp934xhd4k9dtd640zsep5jkesstdm",
@@ -228,6 +228,26 @@ export const secretAllMarket: MarketData[] = [
         isActive: true,
         contract: "secret1gxqsuht45uh2tpqdpru6z6tsw3uyll6md7mzka",
         codeHash: "e88165353d5d7e7847f2c84134c3f7871b2eee684ffac9fcf8d99a4da39dc2f2",
+    },
+
+
+    { 
+        id: 3,
+        name: "b-sscrt-stkd-scrt",
+        exchange: "blizzard",
+        base: "secret1k0jntykt7e4g3y88ltc60czgjuqdy4c9e8fzek",
+        quote: "secret1k6u0cy4feepm6pehnz804zmwakuwdapm69tuc4",
+        basePrecision: 6,
+        quotePrecision: 6,
+        baseLotSize: 0.01,
+        quoteLotSize: 0.01,
+        fee: 0.003,
+        minQuantity: 5,
+        marketType: 'spot',
+        isActive: true,
+        contract: "secret1tejwnma86amug6mfy74qhwclsx92zutd9rfquy",
+        codeHash: "491656820a20a3034becea7a6ace40de4c79583b0d23b46c482959d6f780d80e",
+
     },
 
 ];

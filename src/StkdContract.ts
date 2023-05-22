@@ -66,7 +66,7 @@ export async function getStkdInfo(client: SecretNetworkClient, token: Token):Pro
         else{
             log.info("Unknown error, perhaps functionnal")
         }
-        return 0
+        return { claimable: 0, unbonding: 0, balance: 0 }
     }
 }
 
@@ -122,11 +122,11 @@ export async function unbondStkdToken(client: SecretNetworkClient, amount: numbe
         return resp
     }
     catch(e: any){
-        log.info("Exception claimStkdToken : "+ e.message)
+        log.info("Exception unbondStkdToken : "+ e.message)
         let error = new Error(e)
         if(error.isKo() || error.isNotSure()){
-            log.info("Rpc Error or timeout, let's retry the claim ")
-            return await claimStkdToken(client)
+            log.info("Rpc Error or timeout, let's retry the unbond ")
+            return await unbondStkdToken(client,amount)
         }
         else{
             log.info("Unknown error, perhaps functionnal")
